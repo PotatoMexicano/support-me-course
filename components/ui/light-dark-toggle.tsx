@@ -20,7 +20,7 @@ export function LightDarkToggle({className}: Props) {
                     setIsDarkMode(prevValue => !prevValue);
                     document.body.classList.toggle("dark");
                 }}>
-                    {isDarkMode ? <MoonIcon /> : <SunIcon />}
+                    {isDarkMode ? <MoonIcon /> : <SunIcon className="text-zinc-900" />}
                 </TooltipTrigger>
                 <TooltipContent>
                     {isDarkMode ? "Enable light mode" : "Enable dark mode"}
