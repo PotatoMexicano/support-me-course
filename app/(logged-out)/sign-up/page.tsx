@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PersonStandingIcon } from "lucide-react";
+import { Popover } from "@radix-ui/react-popover";
+import { CalendarIcon, PersonStandingIcon } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -16,6 +18,15 @@ const formSchema = z.object({
     accountType: z.enum(["personal", "company"]),
     companyName: z.string().optional(),
     numberOfEmployees: z.coerce.number().optional(),
+    dob: z.date().refine((date) => {
+        const today = new Date();
+        const eighteedYearsAgo = new Date(
+            today.getFullYear() - 18,
+            today.getMonth(),
+            today.getDate()
+        );
+        return date <= eighteedYearsAgo;
+    }, "You must be at leat 18 years old")
 }).superRefine((data, ctx) => {
     if (data.accountType === "company" && !data.companyName) {
         ctx.addIssue({
@@ -115,6 +126,24 @@ export default function SignupPage() {
                                     )} />
                                 </>
                             }
+
+                            <FormField control={form.control} name="dob" render={({ field }) => (
+                                <FormItem className="flex flex-col pt-2">
+                                    <FormLabel>Date of birth</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button variant={"outline"} className="normal-case flex justify-between pr-1">
+                                                    <span>Pick a date</span>
+                                                    <CalendarIcon />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+
+                                    </Popover>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
 
                             <Button type="submit">Sign up</Button>
                         </form>
