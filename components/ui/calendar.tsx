@@ -6,6 +6,8 @@ import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import { format } from "date-fns"
+import { Select, SelectContent, SelectItem, SelectTrigger } from "./select"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -60,8 +62,33 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        CaptionLabel: () => null,
         IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
+        Dropdown: (dropdownProps) => {
+          let selectValues: {value: string; label: string}[] = [];
+
+          if (dropdownProps.name === "months") {
+            selectValues = Array.from({length: 12}, (_, i) => {
+              return {
+                value: i.toString(),
+                label: format(new Date(new Date().getFullYear(), i, 1), "MMM")
+            }
+            })
+          }
+          return <Select>
+            <SelectTrigger>
+              dropdown
+            </SelectTrigger>
+            <SelectContent>
+              {selectValues.map(selectValue => (
+                <SelectItem key={selectValue.value} value={selectValue.value}>
+                  {selectValue.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        }
       }}
       {...props}
     />

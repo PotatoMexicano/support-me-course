@@ -152,7 +152,8 @@ export default function SignupPage() {
                                             fixedWeeks 
                                             weekStartsOn={1} 
                                             toDate={new Date()} 
-                                            fromDate={dobFromDate} />
+                                            fromDate={dobFromDate}
+                                            captionLayout="dropdown-buttons" />
                                         </PopoverContent>
                                     </Popover>
                                     <FormMessage />
