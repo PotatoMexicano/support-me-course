@@ -3,14 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon, PersonStandingIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -50,7 +53,7 @@ const passwordSchema = z.object({
         })
     }
 })
-
+    
 const baseSchema = z.object({
     email: z.string().email(),
     dob: z.date().refine((date) => {
@@ -62,23 +65,31 @@ const baseSchema = z.object({
         );
         return date <= eighteedYearsAgo;
     }, "You must be at leat 18 years old"),
+    acceptTerms: z.boolean({
+        required_error: "You must accept terms and conditions"
+    }).refine((checked) => checked, "You must accept terms and conditions" ),
 }).superRefine((data, ctx) => {
 });
 
 const formSchema = baseSchema.and(passwordSchema).and(accountTypeSchema);
 
 export default function SignupPage() {
-
+    const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
+            password: "",
+            passwordConfirm: "",
+            companyName: "",
         }
     });
 
-    const handleSubmit = () => {
-        console.log("login validation passed");
-    }
+    const handleSubmit = (data: z.infer<typeof formSchema>) => {
+        console.log("login validation passed: ", data);
+        router.push("/dashboard");
+    };
+
     const accountType = form.watch("accountType");
 
     const dobFromDate = new Date();
@@ -144,7 +155,7 @@ export default function SignupPage() {
                                         <FormItem>
                                             <FormLabel>Employees</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Employees" type="number" min={0} {...field} />
+                                                <Input placeholder="Employees" type="number" min={0} {...field} value={field.value ?? ""} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -185,7 +196,7 @@ export default function SignupPage() {
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="********" type="password" {...field} />
+                                        <PasswordInput placeholder="********" type="password" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -197,6 +208,23 @@ export default function SignupPage() {
                                     <FormControl>
                                         <Input placeholder="********" type="password" {...field} />
                                     </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
+
+                            <FormField control={form.control} name="acceptTerms" render={({ field }) => (
+                                <FormItem>
+                                    <div className="flex gap-2 items-center">
+                                        <FormControl>
+                                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                                        </FormControl>
+
+                                        <FormLabel>I accept the terms and conditions</FormLabel>
+                                    </div>
+                                    <FormDescription>
+                                        By signing up you agree to our {" "}
+                                        <Link className="text-primary hover:underline" href="/terms">terms and conditions</Link>
+                                    </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )} />
