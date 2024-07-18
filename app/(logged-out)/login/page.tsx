@@ -73,7 +73,7 @@ export default function LoginPage() {
                     </Form>
                 </CardContent>
                 <CardFooter className="justify-between">
-                    <small>Dont't have an account?</small>
+                    <small>Dont have an account?</small>
                     <Button asChild variant={"outline"} size={"sm"}>
                         <Link href="/sign-up">Sign up</Link>
                     </Button>
