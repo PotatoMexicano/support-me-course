@@ -1,6 +1,5 @@
 "use client";
 
-import { Divide } from 'lucide-react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
 const data = [
@@ -91,7 +90,7 @@ export default function WorkLocationTrends() {
                         return <div className='text-sm'>Work from office</div>
                     }
                 }} />
-                <Bar dataKey="office" stackId={1} fill='#ec4899' />
+                <Bar dataKey="office" stackId={1} fill="hsl(var(--primary))" />
                 <Bar dataKey="wfh" stackId={1} fill='#6b7280' radius={[4, 4, 0, 0]} />
             </BarChart>
         </ResponsiveContainer>);

@@ -6,7 +6,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { columns, type Employee } from "./columns";
 
 export default async function EmployeesPage() {
-    await setTimeout(5000);
+    await setTimeout(1000);
 
     const employees: Employee[] = [
         {
