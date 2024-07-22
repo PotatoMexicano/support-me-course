@@ -3,17 +3,19 @@ import MenuItem from "./menu-item";
 import MainTitle from "./menu-title";
 import Link from "next/link";
 import { LightDarkToggle } from "@/components/ui/light-dark-toggle";
+import { cn } from "@/lib/utils";
 
-export default function MainMenu() {
+export default function MainMenu({className}: {className?: string}) {
     return (
-    <nav className="bg-muted overflow-auto p-4 flex flex-col">
+    <nav className={cn("bg-muted overflow-auto p-4 flex flex-col rounded-t-lg", className)}>
         <div className="border-b dark:border-b-black border-b-zinc-300 pb-4">
             <MainTitle />
         </div>
 
         <div className="py-4 grow">
             <MenuItem href="/dashboard">My dashboard</MenuItem>
-            <MenuItem href="/dashboard/employees">Teams</MenuItem>
+            <MenuItem href="/dashboard/employees">Employees</MenuItem>
+            <MenuItem href="/dashboard/teams">Teams</MenuItem>
             <MenuItem href="/dashboard/account">Account</MenuItem>
             <MenuItem href="/dashboard/settings">Settings</MenuItem>
         </div>
