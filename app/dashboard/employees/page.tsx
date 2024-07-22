@@ -1,10 +1,14 @@
 import { setTimeout } from "timers/promises";
 import Loading from "./loading";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { DataTable } from "@/components/ui/data-table";
+import { columns, type Employee } from "./columns";
 
 export default async function EmployeesPage() {
     await setTimeout(5000);
 
-    const employees = [
+    const employees: Employee[] = [
         {
             id: 1,
             firstName: "Colin",
@@ -74,10 +78,15 @@ export default async function EmployeesPage() {
     ];
 
     return (
-        <div>
-            <h2>
-                <Loading />
-            </h2>
-        </div>
+        <Card>
+            <CardHeader>
+                <CardTitle>
+                    Employees
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <DataTable data={employees} columns={columns} />
+            </CardContent>
+        </Card>
     )
 }
